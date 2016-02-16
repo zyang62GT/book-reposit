@@ -12,7 +12,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
+DEFAULT_GENRE = 'default_genre'
 
 
 # We set a parent key on the 'Greetings' to ensure that they are all
@@ -20,11 +20,8 @@ DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
 # will be consistent. However, the write rate should be limited to
 # ~1/second.
 
-def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
-    """Constructs a Datastore key for a Guestbook entity.
-    We use guestbook_name as the key.
-    """
-    return ndb.Key('Guestbook', guestbook_name)
+def reposit_key(genre=DEFAULT_GENRE):
+    return ndb.Key('genre', genre)
 
 
 class Author(ndb.Model):
@@ -43,10 +40,9 @@ class Greeting(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
+        genre = self.request.get('genre',DEFAULT_GENRE)
         greetings_query = Greeting.query(
-            ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
+            ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
         user = users.get_current_user()
@@ -60,7 +56,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'user': user,
             'greetings': greetings,
-            'guestbook_name': urllib.quote_plus(guestbook_name),
+            'genre': urllib.quote_plus(guestbook_name),
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -69,7 +65,7 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-class Guestbook(webapp2.RequestHandler):
+class Reposit(webapp2.RequestHandler):
 
     def post(self):
         # We set the same parent key on the 'Greeting' to ensure each
@@ -77,9 +73,9 @@ class Guestbook(webapp2.RequestHandler):
         # single entity group will be consistent. However, the write
         # rate to a single entity group should be limited to
         # ~1/second.
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
-        greeting = Greeting(parent=guestbook_key(guestbook_name))
+        genre = self.request.get('genre',
+                                          DEFAULT_GENRE)
+        greeting = Greeting(parent=reposit_key(genre))
 
         if users.get_current_user():
             greeting.author = Author(
@@ -89,11 +85,11 @@ class Guestbook(webapp2.RequestHandler):
         greeting.content = self.request.get('content')
         greeting.put()
 
-        query_params = {'guestbook_name': guestbook_name}
+        query_params = {'genre': genre}
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Guestbook),
+    ('/sign', Reposit),
 ], debug=True)
