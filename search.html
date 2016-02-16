@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>  
+  <body>
+    <center>
+      <br>
+      <font size="+2" color=0000CC> Search Page </font>
+      <br><br>
+    </center>
+    <hr>
+    
+
+    <form action="/search?genre_name=Non-fiction" method="post">
+      <div>
+	<label for="author">Author's Name:</label>
+	<input type="text" name="author" /> </div>
+      <div class="button"><button type="submit">Search</button></div>
+    </form>
+
+    <hr>
+
+    <form>Genre:
+      <input value="Non-fiction" name="genre_name">
+      <button type="submit">Switch</button>
+    </form>
+
+  </body>
+</html>
