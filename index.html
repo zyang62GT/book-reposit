@@ -20,9 +20,9 @@
       <blockquote>{{ greeting.content }}</blockquote>
     {% endfor %}
 
-    <form action="/enter?book?info={{ genre }}" method="post">
+    <form action="/enter?genre={{ genre }}" method="post">
       <div><textarea name="content" rows="3" cols="60"></textarea></div>
-      <div><input type="submit" value="enter book info"></div>
+      <div><input type="submit" value="enter genre"></div>
     </form>
 
     <hr>

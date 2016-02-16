@@ -91,5 +91,5 @@ class Reposit(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Reposit),
+    ('/enter', Reposit),
 ], debug=True)
