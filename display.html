@@ -12,6 +12,11 @@
     </center>
     <hr>
     
+    {% for greeting in greetings %}
+      <blockquote>{{ greeting.content }}</blockquote>
+    {% endfor %}
+
+    
 
   </body>
 </html>
