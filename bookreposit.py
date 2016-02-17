@@ -27,7 +27,6 @@ def reposit_key(genre=DEFAULT_GENRE):
 class Author(ndb.Model):
     """Sub model for representing an author."""
     identity = ndb.StringProperty(indexed=False)
-    email = ndb.StringProperty(indexed=False)
 
 
 class Greeting(ndb.Model):
@@ -35,7 +34,6 @@ class Greeting(ndb.Model):
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
-
 
 class MainPage(webapp2.RequestHandler):
 
@@ -45,20 +43,10 @@ class MainPage(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-        user = users.get_current_user()
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Logout'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
 
         template_values = {
-            'user': user,
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
-            'url': url,
-            'url_linktext': url_linktext,
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -77,11 +65,8 @@ class Reposit(webapp2.RequestHandler):
                                           DEFAULT_GENRE)
         greeting = Greeting(parent=reposit_key(genre))
 
-        if users.get_current_user():
-            greeting.author = Author(
-                    identity=users.get_current_user().user_id(),
-                    email=users.get_current_user().email())
 
+        greeting.identity = self.request.get('author')
         greeting.content = self.request.get('content')
         greeting.put()
 
@@ -150,11 +135,8 @@ class Enter(webapp2.RequestHandler):
                                           DEFAULT_GENRE)
         greeting = Greeting(parent=reposit_key(genre))
 
-        if users.get_current_user():
-            greeting.author = Author(
-                    identity=users.get_current_user().user_id(),
-                    email=users.get_current_user().email())
 
+        greeting.identity = self.request.get('author')
         greeting.content = self.request.get('content')
         greeting.put()
 

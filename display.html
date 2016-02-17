@@ -13,7 +13,7 @@
     <hr>
     
     {% for greeting in greetings %}
-      <blockquote>{{ greeting.content }}</blockquote>
+      <blockquote>{{ greeting.content}}, {{greeting.author.identity}}</blockquote>
     {% endfor %}
 
     
