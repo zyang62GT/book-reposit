@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
@@ -11,20 +10,20 @@
       <br><br>
     </center>
     <hr>
-    <form action="/enter?genre=Non-fiction" method="post">
+    <form action= "/enter?genre= <?php echo htmlspecialchars($_GET["genre"]); ?>" method="post">
       <div>
 	<label for="author">Author's Name:</label>
 	<input type="text" name="author" /> </div>
       <div>
-	<label for="content">Title:</label>
-	<textarea name="content"></textarea></div>
+	<label for="title">Title:</label>
+	<textarea name="title"></textarea></div>
       <div class="button"><button type="submit">Enter book info</button></div>
     </form>
 
     <hr>
 
     <form>Genre:
-      <input value="Non-fiction" name="genre">
+      <input value="Mystery" name="genre">
       <button type="submit">Switch</button>
     </form>
 
@@ -32,3 +31,4 @@
 
   </body>
 </html>
+
