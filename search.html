@@ -2,7 +2,24 @@
 {% autoescape true %}
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function validateForm()
+    {
+    var a=document.forms["Form"]["author"].value;
+    var b=document.forms["Form"]["genre"].value;
+    if (a==null || a=="" || a=="qweqweqwe",b==null || b=="")
+      {
+      alert("Please Fill All Required Field");
+      return false;
+      }
+    }
+    </script>
+
   </head>  
   <body>
     <center>
@@ -11,40 +28,43 @@
       <br><br>
     </center>
     <hr>
+
+
     {% set foobar = {'value': False} %}   
     {% for greeting in greetings %}
-	{% if author|lower in greeting.author|lower %} 
+	{% if author|lower in greeting.author|lower and author!="" %} 
      		 <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
 		{% if foobar.update({'value': True}) %}
 		{% endif %}
 	{% endif %}
 
     {% endfor %}
+
+	{% if author==null or author=="" or author=="qweqweqwe" %}
+		<blockquote>Please type in the name of the author</blockquote>
+	{% endif %}
     {% if foobar['value'] == False%}
 	<blockquote>No results</blockquote>
     {% endif %}
 
-    {% if author == "" %}
-	<blockquote>Empty author name</blockquote>
-    {% endif %}
-    {% if genre == "" %}
-        <blockquote>Empty genre name</blockquote>
-    {% endif %}
 
     <form action="/search?genre={{genre}}?author={{author}}" method="get">
       <div>
 	<label for="author">Author's Name:</label>
-	<input value="Author's name" type="text" name="author" /> </div>
-     
+	<input value="" type="text" name="author" /> </div>
    
 
     <hr>
+	 <select name="genre" onchange="this.form.submit()">
+	<option value="">Select Genre to search</option>
+ 	 <option value="Non-fiction">Non-fiction</option>
+	  <option value="Mystery">Mystery</option>
+	  <option value="Fiction">Fiction</option>
+	</select> 
+	<noscript><input type="submit" value="Submit"></noscript>
 
-   <div>
-      <input value="Non-fiction" name="genre">
-      <button type="submit">search</button></div>
     </form>
-<ul>
+
 <li> <a href=/>go back</a>
 </ul>
 

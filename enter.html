@@ -2,7 +2,10 @@
 {% autoescape true %}
 <html>
   <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   </head>  
   <body>
     <center>
@@ -11,21 +14,28 @@
       <br><br>
     </center>
     <hr>
-    <form action= "/enter?genre={{genre}}" method="post">
-      <div>
+
+
+    <form action="/enter?genre={{genre}}" name="Form"  method="post">
+     
+ <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Genre
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="/enter?genre=Non-fiction">Non-fiction</a></li>
+    <li><a href="/enter?genre=Mystery">Mystery</a></li>
+    <li><a href="/enter?genre=Fiction">Fiction</a></li>
+  </ul>
+</div>
+        <div>
 	<label for="author">Author's Name:</label>
 	<input type="text" name="author" /> </div>
       <div>
 	<label for="content">Title:</label>
 	<textarea name="content"></textarea></div>
-      <div class="button"><button type="submit">Enter book info</button></div>
-    </form>
-
+	<div class="button"><button type="submit">Enter book info</button></div>
     <hr>
 
-    <form>Genre:
-      <input value="Non-fiction" name="genre">
-      <button type="submit">Switch</button>
     </form>
 
     <a href=""></a>
