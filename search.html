@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% autoescape true %}
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
@@ -12,8 +12,13 @@
     </center>
     <hr>
     
+    {% for greeting in greetings %}
+	{% if author in greeting.author %} 
+     		 <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
+	{% endif %}
+    {% endfor %}
 
-    <form action="/search?genre_name=Non-fiction" method="post">
+    <form action="/search?genre={{genre}}" method="post">
       <div>
 	<label for="author">Author's Name:</label>
 	<input type="text" name="author" /> </div>
@@ -23,9 +28,10 @@
     <hr>
 
     <form>Genre:
-      <input value="Non-fiction" name="genre_name">
+      <input value="Non-fiction" name="genre">
       <button type="submit">Switch</button>
     </form>
 
   </body>
 </html>
+{% endautoescape %}

@@ -12,7 +12,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_GENRE = 'default_genre'
+DEFAULT_GENRE = 'Non-fiction'
 
 
 # We set a parent key on the 'Greetings' to ensure that they are all
@@ -77,20 +77,10 @@ class Reposit(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-        user = users.get_current_user()
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Logout'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
 
         template_values = {
-            'user': user,
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
-            'url': url,
-            'url_linktext': url_linktext,
         }
 
         template = JINJA_ENVIRONMENT.get_template('display.html')
@@ -104,20 +94,10 @@ class Enter(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-        user = users.get_current_user()
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Logout'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
 
         template_values = {
-            'user': user,
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
-            'url': url,
-            'url_linktext': url_linktext,
         }
 
         template = JINJA_ENVIRONMENT.get_template('enter.html')
@@ -129,8 +109,7 @@ class Enter(webapp2.RequestHandler):
         # single entity group will be consistent. However, the write
         # rate to a single entity group should be limited to
         # ~1/second.
-        genre = self.request.get('genre',
-                                          DEFAULT_GENRE)
+        genre = self.request.get('genre',DEFAULT_GENRE)
         greeting = Greeting(parent=reposit_key(genre))
 
 
@@ -159,7 +138,8 @@ class Search(webapp2.RequestHandler):
         greeting.put()
 
         query_params = {'genre': genre}
-        self.redirect('/?' + urllib.urlencode(query_params))
+	prram2 = {'author': greeting.author}
+        self.redirect('/search?' + urllib.urlencode(query_params)+'?'+urllib.urlencode(prram2))
 
     def get(self):
         genre = self.request.get('genre',DEFAULT_GENRE)
@@ -167,20 +147,11 @@ class Search(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-        user = users.get_current_user()
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Logout'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
 
         template_values = {
-            'user': user,
+            'author': self.request.get('author'),
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
-            'url': url,
-            'url_linktext': url_linktext,
         }
 
         template = JINJA_ENVIRONMENT.get_template('search.html')

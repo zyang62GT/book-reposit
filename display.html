@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% autoescape true %}
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
@@ -7,16 +7,17 @@
   <body>
     <center>
       <br>
-      <font size="+2" color=0000CC> Current Titles in Non-fiction </font>
+      <font size="+2" color=0000CC> Current Titles in {{genre}} </font>
       <br><br>
     </center>
     <hr>
     
     {% for greeting in greetings %}
-      <blockquote>{{ greeting.content}}, {{greeting.author}}</blockquote>
+      <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
     {% endfor %}
 
     
 
   </body>
 </html>
+{% endautoescape %}
