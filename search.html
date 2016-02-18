@@ -11,27 +11,43 @@
       <br><br>
     </center>
     <hr>
-    
+    {% set foobar = {'value': False} %}   
     {% for greeting in greetings %}
-	{% if author in greeting.author %} 
+	{% if author|lower in greeting.author|lower %} 
      		 <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
+		{% if foobar.update({'value': True}) %}
+		{% endif %}
 	{% endif %}
-    {% endfor %}
 
-    <form action="/search?genre={{genre}}" method="post">
+    {% endfor %}
+    {% if foobar['value'] == False%}
+	<blockquote>No results</blockquote>
+    {% endif %}
+
+    {% if author == "" %}
+	<blockquote>Empty author name</blockquote>
+    {% endif %}
+    {% if genre == "" %}
+        <blockquote>Empty genre name</blockquote>
+    {% endif %}
+
+    <form action="/search?genre={{genre}}?author={{author}}" method="get">
       <div>
 	<label for="author">Author's Name:</label>
-	<input type="text" name="author" /> </div>
-      <div class="button"><button type="submit">Search</button></div>
-    </form>
+	<input value="Author's name" type="text" name="author" /> </div>
+     
+   
 
     <hr>
 
-    <form>Genre:
+   <div>
       <input value="Non-fiction" name="genre">
-      <button type="submit">Switch</button>
+      <button type="submit">search</button></div>
     </form>
+<ul>
+<li> <a href=/>go back</a>
+</ul>
 
-  </body>
+	  </body>
 </html>
 {% endautoescape %}
