@@ -109,7 +109,7 @@ class Enter(webapp2.RequestHandler):
         # single entity group will be consistent. However, the write
         # rate to a single entity group should be limited to
         # ~1/second.
-        genre = self.request.get('genre',DEFAULT_GENRE)
+        genre = self.request.get('genre')
         greeting = Greeting(parent=reposit_key(genre))
 
 
