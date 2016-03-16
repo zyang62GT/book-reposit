@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>  
+  <body>
+    <center>
+      <br>
+      <font size="+2" color=0000CC> 
+      	{% if user_name == 'false' %}
+      		Items in Temporary Cart 
+      	{% else %}
+      		Items in {{user_name}}'s Cart
+      	{% endif %}
+      </font>
+      <br><br>
+    </center>   
+        
+    {% if checkout == 'true' %}
+    	<hr>
+    	<blockquote> Thanks for your purchase! </blockquote>
+    {% endif %}    
+    
+    <hr>	
+	<form action="/cart-operations" method="post"> 
+    {% for greeting in cart %}
+		<blockquote>{{ greeting.author }},  {{ greeting.content}},  ${{greeting.price}} &nbsp;&nbsp; <button type="submit" name="remove" value="{{greeting.id}}">remove</button></blockquote>
+    {% endfor %}	
+		<hr>
+		<p> Total: {{total}} </p>
+		<div class="button"><button name="checkout" value="checkout" type="submit">Checkout</button></div>
+    </form>		
+	
+  <br><br>
+  <center>
+    <a href=.> Return to main page </a>
+  </center>
+  </body>
+</html>
+{% endautoescape %}

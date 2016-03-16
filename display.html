@@ -13,9 +13,9 @@
     <hr>
     
     {% for greeting in greetings %}
-      <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
+     <input class="checkbox" type="checkbox" name="book" value="{{greeting.id}}##{{genre}}">	 <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
     {% endfor %}
-
+	<input class="checkbox" type="submit" value="Add to Cart">
     
 <ul>
 <li> <a href=/>go back</a>
