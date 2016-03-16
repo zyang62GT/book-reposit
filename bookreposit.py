@@ -1,5 +1,6 @@
 import os
 import urllib
+import random
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -30,9 +31,9 @@ def cart_key(user):
 
 class Greeting(ndb.Model):
     """A main model for representing an individual Guestbook entry."""
-	id = ndb.StringProperty(indexed=True)   
+    id = ndb.StringProperty(indexed=True)   
     author = ndb.StringProperty(indexed=False)
-	price = ndb.FloatProperty(indexed=False)
+    price = ndb.FloatProperty(indexed=False)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
@@ -118,7 +119,15 @@ class Enter(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-
+    def generateId():  # generate an unique id for each book, so that in the shopping cart we only need to store the id
+        CHAR = [chr(i) for i in xrange(ord('A'), ord('Z')+1)] \
+                + [chr(i) for i in xrange(ord('a'), ord('z')+1)] \
+                + [chr(i) for i in xrange(ord('0'), ord('9')+1)]
+        book_id = ''
+        for i in xrange(20):
+            book_id += CHAR[random.randint(0, len(CHAR) - 1)]
+        return book_id
+	greeting.id = generateId()
         template_values = {
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
@@ -135,14 +144,31 @@ class Enter(webapp2.RequestHandler):
         # ~1/second.
         genre = self.request.get('genre')
         greeting = Greeting(parent=reposit_key(genre))
-
+	query_params = {'genre': genre}
+        def generateId():  # generate an unique id for each book, so that in the shopping cart we only need to store the id
+            CHAR = [chr(i) for i in xrange(ord('A'), ord('Z')+1)] \
+                    + [chr(i) for i in xrange(ord('a'), ord('z')+1)] \
+                    + [chr(i) for i in xrange(ord('0'), ord('9')+1)]
+            book_id = ''
+            for i in xrange(20):
+                book_id += CHAR[random.randint(0, len(CHAR) - 1)]
+            return book_id
+        greeting.id = generateId()
+        is_float = True  # check the validity of the price
+        try:
+            greeting.price = float(self.request.get('price'))        
+        except:
+            is_float = False
 
         greeting.author = self.request.get('author')
         greeting.content = self.request.get('content')
-        greeting.put()
+	if greeting.author != '' and greeting.content != '' and is_float:
+            greeting.put()
+            self.redirect('/?' + urllib.urlencode(query_params))
+        else:
+            query_param2 = {'error': 'true'}
+            self.redirect('/enter?' + urllib.urlencode(query_param1) + '&' + urllib.urlencode(query_param2))
 
-        query_params = {'genre': genre}
-        self.redirect('/?' + urllib.urlencode(query_params))
 
 class Search(webapp2.RequestHandler):
 
