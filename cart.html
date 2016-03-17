@@ -19,13 +19,13 @@
         
     {% if checkout == 'true' %}
     	<hr>
-    	<blockquote> Thanks for your purchase! </blockquote>
+    	<blockquote> Order confirmed! </blockquote>
     {% endif %}    
     
     <hr>	
 	<form action="/cart-operations" method="post"> 
     {% for greeting in cart %}
-		<blockquote>{{ greeting.author }},  {{ greeting.content}},  ${{greeting.price}} &nbsp;&nbsp; <button type="submit" name="remove" value="{{greeting.id}}">remove</button></blockquote>
+		<blockquote>{{ greeting.content }}, by {{ greeting.author}},  ${{greeting.price}} &nbsp;&nbsp; <button type="submit" name="remove" value="{{greeting.id}}">remove</button></blockquote>
     {% endfor %}	
 		<hr>
 		<p> Total: {{total}} </p>

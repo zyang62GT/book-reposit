@@ -33,7 +33,7 @@
     {% set foobar = {'value': False} %}   
     {% for greeting in greetings %}
 	{% if author|lower in greeting.author|lower and author!="" %} 
-     		 <blockquote>{{greeting.content}}, {{greeting.author}}</blockquote>
+     		 <blockquote>{{greeting.content}}, by {{greeting.author}}, ${{greeting.price}}</blockquote>
 		{% if foobar.update({'value': True}) %}
 		{% endif %}
 	{% endif %}
