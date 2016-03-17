@@ -11,12 +11,12 @@
       <br><br>
     </center>
     <hr>
-    
+    <form action="/add-to-cart" method="post">   
     {% for greeting in greetings %}
      <input class="checkbox" type="checkbox" name="book" value="{{greeting.id}}##{{genre}}">&nbsp; {{ greeting.author }}, {{ greeting.content}}, ${{greeting.price}}<br>
     {% endfor %}
 	<input class="checkbox" type="submit" value="Add to Cart">
-    
+    </form>
 <ul>
 <li> <a href=/>go back</a>
 </ul>

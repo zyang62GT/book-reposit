@@ -119,15 +119,6 @@ class Enter(webapp2.RequestHandler):
             ancestor=reposit_key(genre)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 
-    def generateId():  # generate an unique id for each book, so that in the shopping cart we only need to store the id
-        CHAR = [chr(i) for i in xrange(ord('A'), ord('Z')+1)] \
-                + [chr(i) for i in xrange(ord('a'), ord('z')+1)] \
-                + [chr(i) for i in xrange(ord('0'), ord('9')+1)]
-        book_id = ''
-        for i in xrange(20):
-            book_id += CHAR[random.randint(0, len(CHAR) - 1)]
-        return book_id
-	greeting.id = generateId()
         template_values = {
             'greetings': greetings,
             'genre': urllib.quote_plus(genre),
@@ -214,10 +205,10 @@ class AddToCart(webapp2.RequestHandler):
             user = self.request.cookies.get('key')
         else:
             user = user.email()
-        books = self.request.get('book', allow_multiple=True)  # get all the books that has been marked in the check box
-        for book in books:
+        greetings = self.request.get('book', allow_multiple=True)  # get all the books that has been marked in the check box
+        for greeting in greetings:
             cart = Cart(parent=cart_key(user))
-            tokens = book.split('##')
+            tokens = greeting.split('##')
             book_id, book_genre = tokens[0], tokens[1]
             cart.book_id = book_id  # only store the book id and genre in the cart database
             cart.book_genre = book_genre
@@ -248,7 +239,7 @@ class DisplayCart(webapp2.RequestHandler):
         total = 0
         books = []
         for item in cart:  # count the total price
-            book = Book.query(ancestor=genre_key(item.book_genre.lower())).filter(Book.id == item.book_id).fetch(1)            
+            book = Greeting.query(ancestor=reposit_key(item.book_genre.lower())).filter(Greeting.id == item.book_id).fetch(1)            
             total += book[0].price
             books.extend(book)
         
@@ -277,8 +268,8 @@ class CartOperations(webapp2.RequestHandler):
             else:
                 user = user.email()       
                 cart_temp = Cart.query(ancestor=cart_key(user))
-                for book in cart_temp:
-                    book.key.delete()
+                for greeting in cart_temp:
+                    greeting.key.delete()
                 self.redirect('/cart?' + urllib.urlencode({'user': user}) + '&' + urllib.urlencode({'checkout': 'true'}))
         
         if button_remove:  # the remove button has been clicked on
@@ -289,9 +280,9 @@ class CartOperations(webapp2.RequestHandler):
             else:
                 user = user.email()
             cart = Cart.query(ancestor=cart_key(user))
-            for book in cart:
-                if book.book_id == book_id:  # delete the book only once
-                    book.key.delete()
+            for greeting in cart:
+                if greeting.book_id == book_id:  # delete the book only once
+                    greeting.key.delete()
                     break
             self.redirect('/cart?' + urllib.urlencode({'user': user}))
 
