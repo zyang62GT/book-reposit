@@ -100,7 +100,7 @@ class Reposit(webapp2.RequestHandler):
         genre = self.request.get('genre',DEFAULT_GENRE)
         greetings_query = Greeting.query(
             ancestor=reposit_key(genre)).order(-Greeting.date)
-        greetings = greetings_query.fetch(10)
+        greetings = greetings_query.fetch(100)
 
 
         template_values = {
@@ -117,7 +117,7 @@ class Enter(webapp2.RequestHandler):
         genre = self.request.get('genre',DEFAULT_GENRE)
         greetings_query = Greeting.query(
             ancestor=reposit_key(genre)).order(-Greeting.date)
-        greetings = greetings_query.fetch(10)
+        greetings = greetings_query.fetch(100)
 
         template_values = {
             'greetings': greetings,
@@ -186,7 +186,7 @@ class Search(webapp2.RequestHandler):
         genre = self.request.get('genre',DEFAULT_GENRE)
         greetings_query = Greeting.query(
             ancestor=reposit_key(genre)).order(-Greeting.date)
-        greetings = greetings_query.fetch(10)
+        greetings = greetings_query.fetch(100)
 
 
         template_values = {

@@ -6,7 +6,7 @@ body {
 form {
     /* Just to center the form on the page */
     margin: 0 auto;
-    width: 700px;
+    width: 1200px;
     /* To see the outline of the form */
     padding: 1em;
     border: 1px solid #CCC;
