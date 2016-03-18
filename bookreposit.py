@@ -38,7 +38,7 @@ class Greeting(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 class Cart(ndb.Model):
-    book_id = ndb.StringProperty()  # Does not store the entire book in the cart; only the id and genre
+    book_id = ndb.StringProperty()  
     book_genre = ndb.StringProperty()
 
 class MainPage(webapp2.RequestHandler):
@@ -136,7 +136,7 @@ class Enter(webapp2.RequestHandler):
         genre = self.request.get('genre')
         greeting = Greeting(parent=reposit_key(genre))
 	query_params = {'genre': genre}
-        def generateId():  # generate an unique id for each book, so that in the shopping cart we only need to store the id
+        def generateId():  
             CHAR = [chr(i) for i in xrange(ord('A'), ord('Z')+1)] \
                     + [chr(i) for i in xrange(ord('a'), ord('z')+1)] \
                     + [chr(i) for i in xrange(ord('0'), ord('9')+1)]
@@ -145,7 +145,7 @@ class Enter(webapp2.RequestHandler):
                 book_id += CHAR[random.randint(0, len(CHAR) - 1)]
             return book_id
         greeting.id = generateId()
-        is_float = True  # check the validity of the price
+        is_float = True  
         try:
             greeting.price = float(self.request.get('price'))        
         except:
@@ -197,7 +197,7 @@ class Search(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('search.html')
         self.response.write(template.render(template_values))
-class AddToCart(webapp2.RequestHandler):
+class EnterCart(webapp2.RequestHandler):
     
     def post(self):
         user = users.get_current_user()
@@ -215,7 +215,7 @@ class AddToCart(webapp2.RequestHandler):
             cart.put()
         self.redirect('/cart?' + urllib.urlencode({'user': user}))
 
-class DisplayCart(webapp2.RequestHandler):
+class ShowCart(webapp2.RequestHandler):
     
     def get(self):
         user = users.get_current_user()
@@ -253,7 +253,7 @@ class DisplayCart(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('cart.html')
         self.response.write(template.render(template_values))                
 
-class CartOperations(webapp2.RequestHandler):
+class CartMoves(webapp2.RequestHandler):
     
     def post(self):
         
@@ -291,7 +291,7 @@ app = webapp2.WSGIApplication([
     ('/enter', Enter),
     ('/display',Reposit),
     ('/search',Search),
-    ('/add-to-cart', AddToCart),
-    ('/cart', DisplayCart),
-    ('/cart-operations', CartOperations),
+    ('/add-to-cart', EnterCart),
+    ('/cart', ShowCart),
+    ('/cart-operations', CartMoves),
 ], debug=True)
