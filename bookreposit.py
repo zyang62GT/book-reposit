@@ -44,11 +44,11 @@ class Cart(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-	cookie_id = self.request.cookies.get('key')  # if first time, then generate an cookie_id
+	cookie_id = self.request.cookies.get('key')  
         if cookie_id == None:
             cookie_id = str(random.randint(1000000000, 9999999999))
 	
-	user = users.get_current_user()  # display different login info depending on whether the user has logged in
+	user = users.get_current_user()  
         if user:
             url = users.create_logout_url('/')
             nickname = user.nickname()
@@ -205,12 +205,12 @@ class EnterCart(webapp2.RequestHandler):
             user = self.request.cookies.get('key')
         else:
             user = user.email()
-        greetings = self.request.get('book', allow_multiple=True)  # get all the books that has been marked in the check box
+        greetings = self.request.get('book', allow_multiple=True)  
         for greeting in greetings:
             cart = Cart(parent=cart_key(user))
             tokens = greeting.split('##')
             book_id, book_genre = tokens[0], tokens[1]
-            cart.book_id = book_id  # only store the book id and genre in the cart database
+            cart.book_id = book_id  
             cart.book_genre = book_genre
             cart.put()
         self.redirect('/cart?' + urllib.urlencode({'user': user}))
@@ -227,7 +227,7 @@ class ShowCart(webapp2.RequestHandler):
             user_name = user
             cookie_id = self.request.cookies.get('key')
             cart_temp = Cart.query(ancestor=cart_key(cookie_id))
-            if cart_temp:  # if the user has logged in, then merge the temporary cart with his/her cart
+            if cart_temp:  
                 for book in cart_temp:
                     cart = Cart(parent=cart_key(user))
                     cart.book_id = book.book_id
@@ -238,7 +238,7 @@ class ShowCart(webapp2.RequestHandler):
         
         total = 0
         books = []
-        for item in cart:  # count the total price
+        for item in cart:  
             book = Greeting.query(ancestor=reposit_key(item.book_genre.lower())).filter(Greeting.id == item.book_id).fetch(1)            
             total += book[0].price
             books.extend(book)
@@ -257,10 +257,10 @@ class CartMoves(webapp2.RequestHandler):
     
     def post(self):
         
-        button_checkout = self.request.get("checkout")  # check which button in the <form> has been clicked
+        button_checkout = self.request.get("checkout")  
         button_remove = self.request.get("remove")
         
-        if button_checkout:  # the checkout button has been clicked
+        if button_checkout:  
             user = users.get_current_user()
             if user == None:
                 url = users.create_login_url('/cart')
@@ -272,8 +272,8 @@ class CartMoves(webapp2.RequestHandler):
                     greeting.key.delete()
                 self.redirect('/cart?' + urllib.urlencode({'user': user}) + '&' + urllib.urlencode({'checkout': 'true'}))
         
-        if button_remove:  # the remove button has been clicked on
-            book_id = button_remove  # the value of the button is the book id
+        if button_remove:  
+            book_id = button_remove  
             user = users.get_current_user()
             if not user:
                 user = self.request.cookies.get('key')
@@ -281,7 +281,7 @@ class CartMoves(webapp2.RequestHandler):
                 user = user.email()
             cart = Cart.query(ancestor=cart_key(user))
             for greeting in cart:
-                if greeting.book_id == book_id:  # delete the book only once
+                if greeting.book_id == book_id:  
                     greeting.key.delete()
                     break
             self.redirect('/cart?' + urllib.urlencode({'user': user}))
@@ -293,5 +293,5 @@ app = webapp2.WSGIApplication([
     ('/search',Search),
     ('/add-to-cart', EnterCart),
     ('/cart', ShowCart),
-    ('/cart-operations', CartMoves),
+    ('/cart-moves', CartMoves),
 ], debug=True)

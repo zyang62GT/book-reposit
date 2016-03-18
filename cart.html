@@ -23,7 +23,7 @@
     {% endif %}    
     
     <hr>	
-	<form action="/cart-operations" method="post"> 
+	<form action="/cart-moves" method="post"> 
 	<table border="0">
     {% for greeting in cart %}
 		<tr><td>{{ greeting.content }}, by {{ greeting.author}},  ${{greeting.price}} &nbsp;&nbsp;</td><td> <button type="submit" name="remove" value="{{greeting.id}}">remove</button></td></tr>

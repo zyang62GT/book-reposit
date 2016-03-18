@@ -9,7 +9,7 @@ form {
     width: 1200px;
     /* To see the outline of the form */
     padding: 1em;
-    border: 1px solid #CCC;
+    border: 0px solid #CCC;
     border-radius: 1em;
 }
 
