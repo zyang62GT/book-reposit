@@ -24,13 +24,19 @@
     
     <hr>	
 	<form action="/cart-operations" method="post"> 
+	<table border="0">
     {% for greeting in cart %}
-		<blockquote>{{ greeting.content }}, by {{ greeting.author}},  ${{greeting.price}} &nbsp;&nbsp; <button type="submit" name="remove" value="{{greeting.id}}">remove</button></blockquote>
+		<tr><td>{{ greeting.content }}, by {{ greeting.author}},  ${{greeting.price}} &nbsp;&nbsp;</td><td> <button type="submit" name="remove" value="{{greeting.id}}">remove</button></td></tr>
     {% endfor %}	
-		<hr>
-		<p> Total: {{total}} </p>
-		<div class="button"><button name="checkout" value="checkout" type="submit">Checkout</button></div>
-    </form>		
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr><td> Total: {{total}} </td>
+	<td><button name="checkout" value="checkout" type="submit">Checkout</button></td>
+	</tr>
+	</table>
+	</form>		
 	
   <br><br>
   <center>
